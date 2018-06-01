@@ -75,13 +75,19 @@ def get_albums():
     albumlist = []
     for pid in photolist:
         all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid)).decode(encoding='utf-8')
+        
         sets = all_contexts["set"]
         for i in sets:
             set_id = i["id"]
+            
             if not(set_id in albumlist):
+                user = json.loads(flickrObj.photos.getInfo(photo_id = pid) ).decode(encoding='utf-8')['photo']['owner']['nsid']
+                photosets = json.loads(flickrObj.photosets.getPhotos(photoset_id = set_id), user_id = user ).decode(encoding='utf-8')
                 newalbum = Album(set_id)
+                for j in photosets['photosets']['photo']:
+                    newalbum.photos_list.append(j['id'])
                 albumlist.append(newalbum)
-    print(albumlist)
+    #print(albumlist)
     return albumlist
 
 
