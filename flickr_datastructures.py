@@ -1,7 +1,7 @@
 import requests, json, sys, string, time, flickrapi, pytz, webbrowser
 from getFlickrList import searchInFlickr
 from datetime import datetime, tzinfo
-import classes
+from classes import Album, Photo
 
 key = "6ab5883201c84be19c9ceb0a4f5ba959"
 secret = "1d2bcde87f98ed92"
@@ -72,22 +72,38 @@ def get_userdict():
 def get_albums():
     flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
     photolist = get_ids()
-    albumlist = []
+    albumlist = {}
     for pid in photolist:
-        all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid)).decode(encoding='utf-8')
-        
+        all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid).decode(encoding='utf-8'))
         sets = all_contexts["set"]
         for i in sets:
-            set_id = i["id"]
-            
+            set_id = i["id"]           
             if not(set_id in albumlist):
-                user = json.loads(flickrObj.photos.getInfo(photo_id = pid) ).decode(encoding='utf-8')['photo']['owner']['nsid']
-                photosets = json.loads(flickrObj.photosets.getPhotos(photoset_id = set_id), user_id = user ).decode(encoding='utf-8')
+                user = json.loads(flickrObj.photos.getInfo(photo_id = pid).decode(encoding='utf-8'))['photo']['owner']['nsid']
+                photosets = json.loads(flickrObj.photosets.getPhotos(photoset_id = set_id, user_id = user).decode(encoding='utf-8'))
                 newalbum = Album(set_id)
-                for j in photosets['photosets']['photo']:
-                    newalbum.photos_list.append(j['id'])
-                albumlist.append(newalbum)
-    #print(albumlist)
+                first_posted = json.loads(flickrObj.photos.getInfo(photo_id = photosets['photoset']['photo'][0]['id']).decode(encoding='utf-8'))['photo']['dates']['posted']
+                first_taken = json.loads(flickrObj.photos.getInfo(photo_id = photosets['photoset']['photo'][0]['id']).decode(encoding='utf-8'))['photo']['dates']['taken']
+                mint = int(datetime.strptime(first_taken,'%Y-%m-%d %H:%M:%S').strftime("%s"))
+                maxt = int(datetime.strptime(first_taken,'%Y-%m-%d %H:%M:%S').strftime("%s"))
+                minp = int(first_posted)
+                maxp = int(first_posted)
+                for j in photosets['photoset']['photo']:
+                	taken = json.loads(flickrObj.photos.getInfo(photo_id = j['id']).decode(encoding='utf-8'))['photo']['dates']['taken']
+                	taken = int(datetime.strptime(taken, '%Y-%m-%d %H:%M:%S').strftime("%s"))
+                	posted = int(json.loads(flickrObj.photos.getInfo(photo_id = j['id']).decode(encoding='utf-8'))['photo']['dates']['posted'])
+                	if taken < mint:
+                		mint = taken
+                	if taken > maxt:
+                		maxt = taken
+                	if posted < minp:
+                		minp = posted
+                	if posted > maxp:
+                		maxp = posted
+                	newalbum.photo_list.append(j['id'])
+                newalbum.time_range_posted = int(maxp) - int(minp)
+                newalbum.time_range_taken = int(maxt) - int(mint)
+                albumlist[newalbum.sid] = newalbum
     return albumlist
 
 
