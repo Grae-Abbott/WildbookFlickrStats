@@ -1,6 +1,6 @@
 class Album:
-    def __init__(self, photo_id, size = -1, species_count = {}, species_ratio = -1, species_ofInterest = "", photo_list = [], time_range = -1.0):
-        self.pid = photo_id #photo id
+    def __init__(self, set_id, size = -1, species_count = {}, species_ratio = -1, species_ofInterest = "", photo_list = [], time_range = -1.0):
+        self.sid = set_id #photo id
         self.size = size
         self.species_ratio = species_ratio
         self.soi = species_ofInterest #species of interest
