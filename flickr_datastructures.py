@@ -1,6 +1,7 @@
 import requests, json, sys, string, time, flickrapi, pytz, webbrowser
 from getFlickrList import searchInFlickr
 from datetime import datetime, tzinfo
+import classes
 
 key = "6ab5883201c84be19c9ceb0a4f5ba959"
 secret = "1d2bcde87f98ed92"
@@ -66,5 +67,22 @@ def get_userdict():
 			user_dict[nsid] = line.split(sep = "', '")
 	file.close
 	return user_dict
+
+#creates a list of albums that
+def get_albums():
+    flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
+    photolist = get_ids()
+    albumlist = []
+    for pid in photolist:
+        all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid)).decode(encoding='utf-8')
+        sets = all_contexts["set"]
+        for i in sets:
+            set_id = i["id"]
+            if not(set_id in albumlist):
+                newalbum = Album(set_id)
+                albumlist.append(newalbum)
+    print(albumlist)
+    return albumlist
+
 
 
