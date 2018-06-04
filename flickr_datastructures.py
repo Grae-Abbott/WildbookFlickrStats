@@ -107,4 +107,6 @@ def get_albums():
     return albumlist
 
 
-
+def add_album_url(a):
+    url = "https://www.flickr.com/photos/"+a.userid+"/albums/"+a.sid
+    a.url = url
