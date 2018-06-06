@@ -12,18 +12,23 @@ class Album:
         self.time_range_taken = time_range_taken
 
 class Photo:
-    def __init__(self, photoPos = -1, photoLocationX = -1, photoLocationY = -1, photoTimeTaken = -1, photoTimePosted = -1, photoIfZoo = False, photoId = "defaultpid", AlbumID = "defaultaid"  ):
+    def __init__(self, pos = -1,url = "", geotagged = False, photographer = "", tags = "", name = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, zoo = False, id = "", albumID = ""  ):
         
-        self.photoPos = photoPos
-        self.photoLocationX = photoLocationX
-        self.photoLocationY = photoLocationY
-        self.photoLocation = (photoLocationX, photoLocationY)
-        self.photoTimeTaken = photoTimeTaken
-        self.photoTimePosted = photoTimePosted
-        self.photoTimeDifference = photoTimeTaken - photoTimePosted
-        self.photoIfZoo = False
-        self.photoId = photoId
-        self.AlbumID = AlbumID
+        self.pos = pos #position in album
+        self.locationX = locationX
+        self.locationY = locationY
+        self.location = (locationX, locationY)
+        self.timeTaken = timeTaken
+        self.timePosted = timePosted
+        self.timeDifference = timeTaken - timePosted
+        self.zoo = False
+        self.id = photoId
+        self.albumId = albumID
+        self.url = url
+        self.name = name
+        self.geotagged = geotagged
+        self.tags = tags
+        self.photographer = photographer #nsid
 
         checkIfZoo()
 
