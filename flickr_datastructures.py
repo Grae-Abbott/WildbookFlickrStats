@@ -5,6 +5,7 @@
     
     Notes:
         Album and Set are interchangeable
+        User Id and nsid are interchangeable
         
 '''
 
@@ -91,7 +92,7 @@ def get_albums():
         all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid).decode(encoding='utf-8'))
         
         #list of all set ids
-        if set in all_contexts#all_contexts["set"] == True:
+        if 'set' in all_contexts #all_contexts["set"] == True:
             sets = all_contexts["set"]
         
         #loops through all the sets that the photo is in
