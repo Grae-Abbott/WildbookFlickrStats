@@ -17,6 +17,9 @@ from classes import Album, Photo
 key = "6ab5883201c84be19c9ceb0a4f5ba959"
 secret = "1d2bcde87f98ed92"
 
+global flickrObj
+flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
+
 #pid refers to photo id, nsid is the user id
 #stores all ids from the files in one list
 def get_ids():
@@ -48,7 +51,7 @@ def create_userdict(ids):
         file.write("\n")
     file.close
 
-return user_dict
+    return user_dict
 
 #returns a list of nsids(user_ids) given that the user_dict file has been created, and their is no local user_dict
 def get_nsids():
@@ -92,7 +95,7 @@ def get_albums():
         all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid).decode(encoding='utf-8'))
         
         #list of all set ids
-        if 'set' in all_contexts #all_contexts["set"] == True:
+        if 'set' in all_contexts: #all_contexts["set"] == True
             sets = all_contexts["set"]
         
         #loops through all the sets that the photo is in
