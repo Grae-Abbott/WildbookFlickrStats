@@ -19,7 +19,7 @@ class Album:
         self.time_range_taken = time_range_taken
 
 class Photo:
-    def __init__(self, pos = -1,url = "", geotagged = False, photographer = "", tags = "", name = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, zoo = False, id = "", albumId = ""  ):
+    def __init__(self, pos = -1, url = "", geotagged = False, photographer = "", tags = "", photo_description = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, photoIfZoo = False, id = "", albumId = ""  ):
         self.id = photoId
         photo_info = json.loads(flickrObj.photos.getInfo(photo_id = self.id).decode(encoding='utf-8'))
         all_contents = json.loads(flickrObj.photos.getAllContexts(photo_id = self.id).decode(encoding='utf-8'))
@@ -30,26 +30,26 @@ class Photo:
         self.timePosted = timePosted if not(timePosted == -1) else photo_info['photo']['dates']['posted'] #unix timestamp
         self.timeDifference = timeTaken - timePosted
         self.photographer = photographer if not(photographer == "") else photo_info['photo']['owner']['nsid'] #nsid
-        self.zoo = False
+        self.photoIfZoo = False
         self.albumId = albumId if not(albumId == "") else ("" if not('set' in all_contexts) else all_contexts['set']['id'])
         self.pos = pos if not(pos == -1) else get_pos() #position in album (1 indexed)
         self.url = url
-        self.name = name
+        self.photo_description = photo_description
         self.geotagged = geotagged
         self.tags = tags
 
         checkIfZoo()
 
-
     def checkIfZoo():
         #set coordinates
-        xmax = 0
-        xmin = 0
-        ymax = 0
-        ymin = 0
+        xmin = -20.868596
+        xmax = 54.187409
+        ymax = 35.478236
+        ymin = -35.587096
         if( photoLocationY <=  ymax and photoLocationY >=  ymin):
             if( photoLocationX <=  xmax and photoLocationX >=  xmin):
-                return True
+                self.photoIfZoo = True
+        return
 
     #gets pos of image in album
     def get_pos():
