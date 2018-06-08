@@ -127,6 +127,16 @@ def get_albums():
                 
                 #loops through each picture in the photoset
                 for j in photosets['photoset']['photo']:
+                    
+                    #added Affan 
+                    
+                    newphoto = Photo(photoId = j['id'])
+                    add_photo_url(newphoto)
+                    add_photo_description(newphoto)
+                    add_photo_location(newphoto)
+                    
+                    #end added
+
                     taken = json.loads(flickrObj.photos.getInfo(photo_id = j['id']).decode(encoding='utf-8'))['photo']['dates']['taken']
                     #converts the text time into unix timestamp
                     taken = int(datetime.strptime(taken, '%Y-%m-%d %H:%M:%S').strftime("%s"))
@@ -173,6 +183,22 @@ def add_album_name(a):
     album_name = json.loads(flickrObj.photosets.getInfo(photoset_id = a.sid , user_id = a.user_id).decode(encoding='utf-8'))['photoset']['title']['_content']
     a.name = album_name
 
+#added Affan
+
+def add_photo_url(p):
+    photourl = json.loads(flickrObj.photos.getInfo(photo_id = p.photoId).decode(encoding='utf-8'))['photo']['urls']['url']['0']['_content']
+    p.url = photourl
 
 
+def add_photo_description(p):
+    photodes = json.loads(flickrObj.photos.getInfo(photo_id = p.photoId).decode(encoding='utf-8'))['photo']['description']['_content']
+    p.photo_description = photodes
 
+def add_photo_location(p):
+    photolocation = json.loads(flickrObj.photos.getInfo(photo_id = p.photoId).decode(encoding='utf-8'))['photo']['location']
+    p.photoLocationX = float(photolocation['latitude'])
+    p.photoLocationY = float(photolocation['longitude'])
+    p.location = (p.photoLocationX,p.photoLocationY)
+    p.checkIfZoo()
+
+#end added
