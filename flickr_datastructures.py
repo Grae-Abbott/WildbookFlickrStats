@@ -32,6 +32,17 @@ def get_ids():
         f.close()
     return ids
 
+#creates list of nsids from photo id list
+def nsid_list(ids):
+    flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
+    nsid_list = []
+    for pid in ids:
+        photo_info = json.loads(flickrObj.photos.getInfo(photo_id = str(pid)).decode(encoding='utf-8'))
+        nsid = photo_info['photo']['owner']['nsid']
+        if not nsid in nsid_list:
+            nsid_list.append(nsid)
+    return nsid_list
+
 #creates user_dict which maps users to a list of their photos that contain grevy's zebras, also writes dict to file to avoid multiple flickr api queries
 def create_userdict(ids):
     user_dict = {}
