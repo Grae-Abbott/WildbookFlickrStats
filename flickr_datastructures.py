@@ -197,16 +197,16 @@ def add_album_name(a):
 #added Affan
 
 def add_photo_url(p):
-    photourl = json.loads(flickrObj.photos.getInfo(photo_id = p.photoId).decode(encoding='utf-8'))['photo']['urls']['url']['0']['_content']
+    photourl = json.loads(flickrObj.photos.getInfo(photo_id = p.id).decode(encoding='utf-8'))['photo']['urls']['url'][0]['_content']
     p.url = photourl
 
 
 def add_photo_description(p):
-    photodes = json.loads(flickrObj.photos.getInfo(photo_id = p.photoId).decode(encoding='utf-8'))['photo']['description']['_content']
+    photodes = json.loads(flickrObj.photos.getInfo(photo_id = p.id).decode(encoding='utf-8'))['photo']['description']['_content']
     p.photo_description = photodes
 
 def add_photo_location(p):
-    photolocation = json.loads(flickrObj.photos.getInfo(photo_id = p.photoId).decode(encoding='utf-8'))['photo']['location']
+    photolocation = json.loads(flickrObj.photos.getInfo(photo_id = p.id).decode(encoding='utf-8'))['photo']['location']
     p.photoLocationX = float(photolocation['latitude'])
     p.photoLocationY = float(photolocation['longitude'])
     p.location = (p.photoLocationX,p.photoLocationY)

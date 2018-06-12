@@ -19,6 +19,21 @@ class Album:
         self.time_range_taken = time_range_taken
 
 class Photo:
+    #gets pos of image in album
+    def get_pos(self):
+        if self.albumId == "":
+            return -1
+        else:
+            album = json.loads(flickrObj.photosets.getPhotos(photoset_id = self.albumId, user_id = self.id).decode(encoding='utf-8'))
+            if not 'photoset' in album:
+                return -1
+            else:
+                album = album['photoset']['photo']
+            id_list = [] #list of all pids in album in order they appear on flickr
+            for i in album:
+                id_list.append(i['id'])
+            return id_list.index(self.id)+1
+
     def __init__(self, pos = -1, url = "", geotagged = False, photographer = "", tags = "", photo_description = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, photoIfZoo = False, photoId = "", albumId = ""  ):
         self.id = photoId
         photo_info = json.loads(flickrObj.photos.getInfo(photo_id = self.id).decode(encoding='utf-8'))
@@ -31,33 +46,27 @@ class Photo:
         self.timeDifference = timeTaken - timePosted
         self.photographer = photographer if not(photographer == "") else photo_info['photo']['owner']['nsid'] #nsid
         self.photoIfZoo = False
-        self.albumId = albumId if not(albumId == "") else ("" if not('set' in all_contexts) else all_contexts['set']['id'])
-        self.pos = pos if not(pos == -1) else get_pos() #position in album (1 indexed)
+        self.albumId = albumId if not(albumId == "") else ("" if not('set' in all_contexts) else all_contexts['set'][0]['id'])
+        self.pos = pos if not(pos == -1) else self.get_pos() #position in album (1 indexed)
         self.url = url
         self.photo_description = photo_description
         self.geotagged = geotagged
         self.tags = tags
 
-        checkIfZoo()
+        self.checkIfZoo()
 
-    def checkIfZoo():
+    def checkIfZoo(self):
         #set coordinates
         xmin = -20.868596
         xmax = 54.187409
         ymax = 35.478236
         ymin = -35.587096
-        if( photoLocationY <=  ymax and photoLocationY >=  ymin):
-            if( photoLocationX <=  xmax and photoLocationX >=  xmin):
+        if( self.locationY <=  ymax and self.locationY >=  ymin):
+            if( self.locationX <=  xmax and self.locationX >=  xmin):
                 self.photoIfZoo = True
         return
 
-    #gets pos of image in album
-    def get_pos():
-        if self.albumId == "":
-            return -1
-        else:
-            album = json.loads(flickrObj.photosets.getPhotos(photoset_id = self.albumId, user_id = self.id).decode(encoding='utf-8'))['photoset']['photo']
-            return album.index(self.id)+1
+
 
 
 
