@@ -1,4 +1,4 @@
-import flickrapi, time
+import flickrapi, time, json
 from datetime import datetime, tzinfo
 
 key = "6ab5883201c84be19c9ceb0a4f5ba959"
@@ -19,10 +19,10 @@ class Album:
         self.time_range_taken = time_range_taken
 
 class Photo:
-    def __init__(self, pos = -1, url = "", geotagged = False, photographer = "", tags = "", photo_description = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, photoIfZoo = False, id = "", albumId = ""  ):
+    def __init__(self, pos = -1, url = "", geotagged = False, photographer = "", tags = "", photo_description = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, photoIfZoo = False, photoId = "", albumId = ""  ):
         self.id = photoId
         photo_info = json.loads(flickrObj.photos.getInfo(photo_id = self.id).decode(encoding='utf-8'))
-        all_contents = json.loads(flickrObj.photos.getAllContexts(photo_id = self.id).decode(encoding='utf-8'))
+        all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = self.id).decode(encoding='utf-8'))
         self.locationX = locationX
         self.locationY = locationY
         self.location = (locationX, locationY)
