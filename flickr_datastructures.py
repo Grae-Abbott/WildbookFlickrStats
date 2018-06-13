@@ -32,6 +32,14 @@ def get_ids():
         f.close()
     return ids
 
+def get_urls():
+    urls = []
+    f = open('all_urls','r')
+    for line in f: #each id in the file is stored on a new line
+        urls.append(line[:-1]) #stores the id without the newline character at the end
+    f.close()
+    return urls
+
 #creates list of nsids from photo id list
 def nsid_list(ids):
     flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
