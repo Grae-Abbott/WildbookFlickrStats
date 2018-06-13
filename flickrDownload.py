@@ -27,7 +27,7 @@ IMG_FOLDER = "/mnt/c/Users/ghabb/Desktop/GitHub/WildbookFlickrStats/"
 folder_id = '1eJeXfRx8VxDRLT8ttdEgjC4eWUa258M1' #folder id for "Shared with me/social media bias/data/Grevy's"
 resultsID = '1Wdxca3CdSw9TvSIvPJhr-wLM2FxdmgKt' #folder id for ^^/"Grevy's Search Results"
 
-def download_flickr_photo(url, keyword, count):
+def download_flickr_photo(url, count):
     results_folder = IMG_FOLDER #+ keyword.replace(" ", "_") + "/"
     if not os.path.exists(results_folder):
         os.makedirs(results_folder)
@@ -120,6 +120,6 @@ def download_flickr_photos(keywords, size='original', max_nb_img=-1):
 
 #download_flickr_photos(keywords="grevy's zebra",max_nb_img = 5)
 
-url1 = "https://farm1.staticflickr.com/893/40731835074_ccfbbefb59_o.jpg"
-download_flickr_photo(url1, "test", 100)
+#url1 = "https://farm1.staticflickr.com/893/40731835074_ccfbbefb59_o.jpg"
+#download_flickr_photo(url1, "test", 100)
 
