@@ -4,10 +4,17 @@ import os
 #import config
 from random import randint
 import time
-import flickr_datastructures as dts 
 import flickrDownload
 
-urls = dts.get_urls()
+def get_urls():
+    urls = []
+    f = open('all_urls','r')
+    for line in f: #each id in the file is stored on a new line
+        urls.append(line[:-1]) #stores the id without the newline character at the end
+    f.close()
+    return urls
+
+urls = get_urls()
 
 count = 1
 for i in urls:
