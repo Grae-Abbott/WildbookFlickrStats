@@ -24,12 +24,10 @@ flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
 #stores all ids from the files in one list
 def get_ids():
     ids = []
-    for i in range(2010,2019):
-        filename = "zebra_ids_" + str(i)
-        f = open(filename,'r')
-        for line in f: #each id in the file is stored on a new line
-            ids.append(line[:-1]) #stores the id without the newline character at the end
-        f.close()
+    f = open('all_ids','r')
+    for line in f: #each id in the file is stored on a new line
+        ids.append(line[:-1]) #stores the id without the newline character at the end
+    f.close()
     return ids
 
 def get_urls():

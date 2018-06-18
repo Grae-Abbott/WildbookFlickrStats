@@ -37,7 +37,7 @@ def download_flickr_photo(url, count):
     try:
         #downloads image
         urllib.urlretrieve(url,  results_folder + filename)
-        print 'Downloading image #' + str(count) + ' from url ' + url
+        #print 'Downloading image #' + str(count) + ' from url ' + url
 
         #UPLOAD LINES HERE
 
