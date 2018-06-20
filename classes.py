@@ -24,29 +24,14 @@ class Album:
         file.write("User id: " + str(self.user_id) + '\n')
         file.write("Name: " + str(self.name) + '\n')
         file.write("Number of images: " + str(self.size) + '\n')
-        file.write("Ratio of images of zebras to total: " + str(self.species_ratio) + '\n')
+        file.write("Ratio of images of zebras to total: " + str( round(self.species_ratio,5)  ) + '\n')
         file.write("Species of interest: " + str(self.soi) + '\n')
         file.write("Image ids: " + str(self.photo_list) + '\n')
-        file.write("Time range of images in album being posted: " + str(self.time_range_posted) + '\n')
-        file.write("Time range of images in album being taken: " + str(self.time_range_taken) + '\n')
+        file.write("Time range of images in album being posted: " + str(    round(self.time_range_posted/60/60/24 ,5)   ) + " days" + '\n')
+        file.write("Time range of images in album being taken: " + str( round(self.time_range_taken/60/60/24, 5)   ) + " days" + '\n')
         file.write("===" + '\n')
 
 class Photo:
-    #gets pos of image in album
-    def get_pos(self):
-        if self.albumId == "":
-            return -1
-        else:
-            album = json.loads(flickrObj.photosets.getPhotos(photoset_id = self.albumId, user_id = self.id).decode(encoding='utf-8'))
-            if not 'photoset' in album:
-                return -1
-            else:
-                album = album['photoset']['photo']
-            id_list = [] #list of all pids in album in order they appear on flickr
-            for i in album:
-                id_list.append(i['id'])
-            return id_list.index(self.id)+1
-
     def __init__(self, pos = -1, url = "", geotagged = False, photographer = "", tags = "", photo_description = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, photoIfZoo = False, photoId = "", albumId = ""  ):
         self.id = photoId
         photo_info = json.loads(flickrObj.photos.getInfo(photo_id = self.id).decode(encoding='utf-8'))
@@ -79,40 +64,67 @@ class Photo:
                 self.photoIfZoo = True
         return
 
+    #gets pos of image in album
+    def get_pos(self):
+        if self.albumId == "":
+            return -1
+            else:
+                album = json.loads(flickrObj.photosets.getPhotos(photoset_id = self.albumId, user_id = self.id).decode(encoding='utf-8'))
+                if not 'photoset' in album:
+                    return -1
+                else:
+                    album = album['photoset']['photo']
+                id_list = [] #list of all pids in album in order they appear on flickr
+                for i in album:
+                    id_list.append(i['id'])
+                return id_list.index(self.id)+1
 
-        
+    def print_photo(self, file):
+        file.write("Photo id: " + str(self.id) + '\n')
+        file.write("Url: " + str(self.url) + '\n')
+        file.write("Location: " + str(self.location) + '\n')
+        file.write("Time difference: " + str( round(self.timeDifference/60/60/24 ,5) ) + " days" + '\n')
+        file.write("Photographer: " + str(self.photographer) + '\n')
+        file.write("Taken in zoo: " + str(self.photoIfZoo) + '\n')
+        file.write("Album ID: " + str(self.albumId) + '\n')
+        file.write("Positiion in the album: " + str(self.pos) + '\n')
+        file.write("Photo description: " + str(self.photo_description) + '\n')
+        file.write("Geotagged: " + str(self.geotagged) + '\n')
+        file.write("Tags: " + str(self.tags) + '\n')
+        file.write("===" + '\n')
+
+
+
 class Photographer:
-	def __init__(self, user_id, name = "", userIfPro=False, geotagged= False, hometown="", timeTaken = -1, timePosted = -1, numposted=-1, numalbum=-1, firstyear=-1, numlocations=-1):
-		self.user_id = user_id
-		self.name = name 
-		user_info=people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))
-		self.timeTaken = timeTaken if not(timeTaken == -1) else datetime.strptime(photo_info['photo']['dates']['taken'], '%Y-%m-%d %H:%M:%S').strftime("%s") #unix timestamp
-		self.timePosted = timePosted if not(timePosted == -1) else photo_info['photo']['dates']['posted'] #unix timestamp
-		self.timeDelay = timeTaken - timePosted
-		self.hometown=hometown
-		self.geotagged = geotagged
-		self.userIfPro=False 
-		self.numposted=numposted #count=people['person']['photos']['count']['_content']
-		self.numalbum=numalbum
-		self.firstyear=firstyear #first=people['person']['photos']['firstdate']['_content']
-		self.numlocations=numlocations
-		#frequency??
-		
-		
-		self.checkIfPro(user_id)
-	
-	#i dont know if this is right or necessary?	
-	def checkIfPro(self, user_id):
-		people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))['person']['ispro']
-		if(people==1):
-			return True
-		else:
-			return False
+    def __init__(self, user_id, name = "", userIfPro=False, geotagged= False, hometown="", timeTaken = -1, timePosted = -1, numposted=-1, numalbum=-1, firstyear=-1, numlocations=-1):
+        self.user_id = user_id
+        self.name = name
+        user_info=people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))
+        self.timeTaken = timeTaken if not(timeTaken == -1) else datetime.strptime(photo_info['photo']['dates']['taken'], '%Y-%m-%d %H:%M %S').strftime("%s") #unix timestamp
+        self.timePosted = timePosted if not(timePosted == -1) else photo_info['photo']['dates']['posted'] #unix timestamp
+        self.timeDelay = timeTaken - timePosted
+        self.hometown=hometown
+        self.geotagged = geotagged
+        self.userIfPro=False
+        self.numposted=numposted #count=people['person']['photos']['count']['_content']
+        self.numalbum=numalbum
+        self.firstyear=firstyear #first=people['person']['photos']['firstdate']['_content']
+        self.numlocations=numlocations
+        #frequency??
 
+        self.checkIfPro(user_id)
+    
+    #i dont know if this is right or necessary?
+    def checkIfPro(self, user_id):
+        people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))['person']['ispro']
+        if(people==1):
+            return True
+        else:
+            return False
 
-
-
-
+    def print_photo(self, file):
+        #update
+        return
 
 
 
