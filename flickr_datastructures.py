@@ -185,14 +185,14 @@ def get_albums():
                 
                 #calculates the time range the album has for taken/posted
                 newalbum.time_range_posted = int(maxp) - int(minp)
-                    newalbum.time_range_taken = int(maxt) - int(mint)
-                    #updates album size
-                    newalbum.size = album_size
-                    #calculates species of interest ratio to total number of photos in album
-                    newalbum.species_ratio = float(num_species)/float(album_size)
+                newalbum.time_range_taken = int(maxt) - int(mint)
+                #updates album size
+                newalbum.size = album_size
+                #calculates species of interest ratio to total number of photos in album
+                newalbum.species_ratio = float(num_species)/float(album_size)
                     
-                    #adds the album to the albumlist
-                    albumlist[newalbum.sid] = newalbum
+                #adds the album to the albumlist
+                albumlist[newalbum.sid] = newalbum
 
 return albumlist
 
