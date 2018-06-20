@@ -46,12 +46,12 @@ while(yr<2019):
     furls.close()
     yr += 1
 
-f1 = open('all_ids2','w')
+f1 = open('all_ids','w')
 for i in all_ids:
 	f1.write(i + "\n")
 f1.close
 
-f2 = open('all_urls2','w')
+f2 = open('all_urls','w')
 for i in all_urls:
 	f2.write(i + "\n")
 f2.close
