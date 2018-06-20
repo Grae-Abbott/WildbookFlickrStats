@@ -68,7 +68,7 @@ def create_userdict(ids):
         file.write("\n")
     file.close
     
-return user_dict
+    return user_dict
 
 #returns a list of nsids(user_ids) given that the user_dict file has been created, and their is no local user_dict
 def get_nsids():
@@ -194,7 +194,7 @@ def get_albums():
                 #adds the album to the albumlist
                 albumlist[newalbum.sid] = newalbum
 
-return albumlist
+    return albumlist
 
 def add_album_url(a):
     #constructs the url for each album given album object parameter
