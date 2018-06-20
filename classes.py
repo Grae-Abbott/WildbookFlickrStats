@@ -88,7 +88,7 @@ class Photo:
         file.write("Taken in zoo: " + str(self.photoIfZoo) + '\n')
         file.write("Album ID: " + str(self.albumId) + '\n')
         file.write("Positiion in the album: " + str(self.pos) + '\n')
-        file.write("Photo description: " + str(self.photo_description) + '\n')
+        file.write("Photo description: " + str(`self.photo_description) + '\n')
         file.write("Geotagged: " + str(self.geotagged) + '\n')
         file.write("Tags: " + str(self.tags) + '\n')
         file.write("===" + '\n')
@@ -123,8 +123,17 @@ class Photographer:
             return False
 
     def print_photo(self, file):
-        #update
-        return
+        file.write("User id: " + str(self.user_id) + '\n')
+        file.write("Name: " + str(self.name) + '\n')
+        file.write("Avg Delay: " + str( round(self.timeDelay/60/60/24 ,5) ) + " days" + '\n')
+        file.write("Hometown: " + str(self.hometown)+'\n')
+        file.write("Avg Geotagged: " + str(self.geotagged) + '\n')
+        file.write("Is Pro: " + str(self.userIfPro) + '\n')
+        file.write("# Pics Posted: " + str(self.numposted) + '\n')
+        file.write("# Albums Posted: " + str(self.numalbum) + '\n')
+        file.write("Day First Active: " + str(datetime.strptime(self.firstyear, '%Y-%m-%d %H:%M:%S').strftime("%s")) + '\n')
+        file.write("Number of Locations: " + str(self.numlocations) + '\n')
+        file.write("===" + '\n')
 
 
 
