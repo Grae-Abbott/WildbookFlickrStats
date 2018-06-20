@@ -107,8 +107,8 @@ def get_albums():
     photolist = get_ids()
     albumlist = {}
     
-    #loops through all the photos in all the photos in the search
-    for i in range(0,10):
+    #loops through all the photos in the search
+    for i in range(0,1):
         pid = photolist[i]
     #for pid in photolist:
         all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid).decode(encoding='utf-8'))
@@ -145,7 +145,7 @@ def get_albums():
                     num_species = 0
                 
                     #loops through each picture in the photoset creatingi a photo class object for each image
-                    '''for j in photosets['photoset']['photo']:
+                    for j in photosets['photoset']['photo']:
                     
                         newphoto = Photo(photoId = j['id'])
                         add_photo_url(newphoto)
@@ -184,7 +184,7 @@ def get_albums():
                     newalbum.size = album_size
                     #calculates species of interest ratio to total number of photos in album
                     newalbum.species_ratio = float(num_species)/float(album_size)
-                    '''
+                    
                     #adds the album to the albumlist
                     albumlist[newalbum.sid] = newalbum
 
