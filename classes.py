@@ -99,7 +99,7 @@ class Photographer:
     def __init__(self, user_id, name = "", userIfPro=False, geotagged= False, hometown="", timeTaken = -1, timePosted = -1, numposted=-1, numalbum=-1, firstyear=-1, numlocations=-1):
         self.user_id = user_id
         self.name = name
-        user_info=people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))
+        user_info=people=json.loads(flickrObj.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))
         self.timeTaken = timeTaken if not(timeTaken == -1) else datetime.strptime(photo_info['photo']['dates']['taken'], '%Y-%m-%d %H:%M %S').strftime("%s") #unix timestamp
         self.timePosted = timePosted if not(timePosted == -1) else photo_info['photo']['dates']['posted'] #unix timestamp
         self.timeDelay = timeTaken - timePosted
@@ -116,13 +116,13 @@ class Photographer:
     
     #i dont know if this is right or necessary?
     def checkIfPro(self, user_id):
-        people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))['person']['ispro']
+        people=json.loads(flickrObj.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))['person']['ispro']
         if(people==1):
             return True
         else:
             return False
 
-    def print_photo(self, file):
+    def print_photographer(self, file):
         file.write("User id: " + str(self.user_id) + '\n')
         file.write("Name: " + str(self.name) + '\n')
         file.write("Avg Delay: " + str( round(self.timeDelay/60/60/24 ,5) ) + " days" + '\n')
