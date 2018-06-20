@@ -104,13 +104,16 @@ def get_albums():
     
     #creates flickr object
     flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
-    photolist = get_ids()
-    albumlist = {}
+    photolist = get_ids() #list of ids returned from the search on flickr
+    albumlist = {} # {album id: album object}
     
     #loops through all the photos in the search
-    for i in range(0,1):
+    for pid in photolist:
+        '''
+        #for i in range(0,1):
         pid = photolist[i]
-        #for pid in photolist:
+        '''
+        
         all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid).decode(encoding='utf-8'))
         
         #list of all set ids
@@ -134,6 +137,7 @@ def get_albums():
                     #initializes minimum and maximum posted/taken time
                     first_posted = json.loads(flickrObj.photos.getInfo(photo_id = photosets['photoset']['photo'][0]['id']).decode(encoding='utf-8'))['photo']['dates']['posted']
                     first_taken = json.loads(flickrObj.photos.getInfo(photo_id = photosets['photoset']['photo'][0]['id']).decode(encoding='utf-8'))['photo']['dates']['taken']
+                    #converts the text time into unix timestamp
                     mint = int(datetime.strptime(first_taken,'%Y-%m-%d %H:%M:%S').strftime("%s"))
                     maxt = int(datetime.strptime(first_taken,'%Y-%m-%d %H:%M:%S').strftime("%s"))
                     minp = int(first_posted)
