@@ -4,10 +4,10 @@
     2018
     
     Notes:
-        Album and Set are interchangeable
-        User Id and nsid are interchangeable
-        
-'''
+    Album and Set are interchangeable
+    User Id and nsid are interchangeable
+    
+    '''
 
 import requests, json, sys, string, time, flickrapi, pytz, webbrowser
 from getFlickrList import searchInFlickr
@@ -67,8 +67,8 @@ def create_userdict(ids):
         file.write(str(user_dict[i]))
         file.write("\n")
     file.close
-
-    return user_dict
+    
+return user_dict
 
 #returns a list of nsids(user_ids) given that the user_dict file has been created, and their is no local user_dict
 def get_nsids():
@@ -110,14 +110,14 @@ def get_albums():
     #loops through all the photos in the search
     for i in range(0,1):
         pid = photolist[i]
-    #for pid in photolist:
+        #for pid in photolist:
         all_contexts = json.loads(flickrObj.photos.getAllContexts(photo_id = pid).decode(encoding='utf-8'))
         
         #list of all set ids
         if 'set' in all_contexts: #all_contexts["set"] == True
             sets = all_contexts["set"]
-        
-        #loops through all the sets that the photo is in
+            
+            #loops through all the sets that the photo is in
             for i in sets:
                 set_id = i["id"]
                 #if the album has not already been processed
@@ -130,7 +130,7 @@ def get_albums():
                     newalbum = Album(set_id, user_id = user)
                     add_album_url(newalbum)
                     add_album_name(newalbum)
-                
+                    
                     #initializes minimum and maximum posted/taken time
                     first_posted = json.loads(flickrObj.photos.getInfo(photo_id = photosets['photoset']['photo'][0]['id']).decode(encoding='utf-8'))['photo']['dates']['posted']
                     first_taken = json.loads(flickrObj.photos.getInfo(photo_id = photosets['photoset']['photo'][0]['id']).decode(encoding='utf-8'))['photo']['dates']['taken']
@@ -138,26 +138,32 @@ def get_albums():
                     maxt = int(datetime.strptime(first_taken,'%Y-%m-%d %H:%M:%S').strftime("%s"))
                     minp = int(first_posted)
                     maxp = int(first_posted)
-                
+                    
                     #counter in loop which counts number of pictures in album
                     album_size = 0
                     #number of pictures of species of interest in the album
                     num_species = 0
-                
+                    
                     #loops through each picture in the photoset creatingi a photo class object for each image
                     for j in photosets['photoset']['photo']:
-                    
+                        
                         newphoto = Photo(photoId = j['id'])
                         add_photo_url(newphoto)
                         add_photo_description(newphoto)
                         #add_photo_location(newphoto)
-
-
+                        
+                        '''
+                            NEED TO BE DONE:
+                            make photo_list a list of photo objects (appending newphoto ) instead of a
+                            list of photo ids, which it currently is
+                            
+                            see: line 177
+                            '''
                         taken = json.loads(flickrObj.photos.getInfo(photo_id = j['id']).decode(encoding='utf-8'))['photo']['dates']['taken']
                         #converts the text time into unix timestamp
                         taken = int(datetime.strptime(taken, '%Y-%m-%d %H:%M:%S').strftime("%s"))
                         posted = int(json.loads(flickrObj.photos.getInfo(photo_id = j['id']).decode(encoding='utf-8'))['photo']['dates']['posted'])
-                    
+                        
                         #resets the max/min time if its later/earlier respectively
                         if taken < mint:
                             mint = taken
@@ -169,16 +175,16 @@ def get_albums():
                             maxp = posted
                         #adds the photo to the photolist attribute of the album object
                         newalbum.photo_list.append(j['id'])
-                    
-                        album_size+=1
-                    
-                        #checks to see if picture has tag of species of interest and updates the count
-                        if j in photolist :
-                            num_species+=1
                         
+                        album_size+=1
+                        
+                        #checks to see if picture has tag of species of interest and updates the count
+                        if j['id'] in photolist :
+                            num_species+=1
                 
-                    #calculates the time range the album has for taken/posted
-                    newalbum.time_range_posted = int(maxp) - int(minp)
+                
+                #calculates the time range the album has for taken/posted
+                newalbum.time_range_posted = int(maxp) - int(minp)
                     newalbum.time_range_taken = int(maxt) - int(mint)
                     #updates album size
                     newalbum.size = album_size
@@ -188,7 +194,7 @@ def get_albums():
                     #adds the album to the albumlist
                     albumlist[newalbum.sid] = newalbum
 
-    return albumlist
+return albumlist
 
 def add_album_url(a):
     #constructs the url for each album given album object parameter
@@ -211,9 +217,10 @@ def add_photo_description(p):
     p.photo_description = photodes
 
 def add_photo_location(p):
-	#error caused by function: KeyError: 'location'
+    #error caused by function: KeyError: 'location'
     photolocation = json.loads(flickrObj.photos.getInfo(photo_id = p.id).decode(encoding='utf-8'))['photo']['location']
     p.photoLocationX = float(photolocation['latitude'])
     p.photoLocationY = float(photolocation['longitude'])
     p.location = (p.photoLocationX,p.photoLocationY)
     p.checkIfZoo()
+
