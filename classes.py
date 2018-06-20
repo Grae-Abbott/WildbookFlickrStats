@@ -7,7 +7,7 @@ flickrObj = flickrapi.FlickrAPI(key,secret, format = "json")
 
 class Album:
     def __init__(self, set_id, url = "", user_id = "", name = "", size = -1, species_count = {}, species_ratio = -1.0, species_ofInterest = "", photo_list = [], time_range_posted = -1.0, time_range_taken = -1.0):
-        self.sid = set_id #photo id
+        self.sid = set_id #set id
         self.url = url
         self.user_id = user_id
         self.name = name
@@ -17,6 +17,19 @@ class Album:
         self.photo_list = photo_list
         self.time_range_posted = time_range_posted
         self.time_range_taken = time_range_taken
+
+    def print_album(self, file):
+        file.write("Album/Set id: " + str(self.sid) + '\n')
+        file.write("Url: " + str(self.url) + '\n')
+        file.write("User id: " + str(self.user_id) + '\n')
+        file.write("Name: " + str(self.name) + '\n')
+        file.write("Number of images: " + str(self.size) + '\n')
+        file.write("Ratio of images of zebras to total: " + str(self.species_ratio) + '\n')
+        file.write("Species of interest: " + str(self.soi) + '\n')
+        file.write("Image ids: " + str(self.photo_list) + '\n')
+        file.write("Time range of images in album being posted: " + str(self.time_range_posted) + '\n')
+        file.write("Time range of images in album being taken: " + str(self.time_range_taken) + '\n')
+        file.write("===" + '\n')
 
 class Photo:
     #gets pos of image in album
@@ -65,6 +78,8 @@ class Photo:
             if( self.locationX <=  xmax and self.locationX >=  xmin):
                 self.photoIfZoo = True
         return
+
+
 
 
 
