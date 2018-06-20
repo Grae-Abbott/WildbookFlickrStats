@@ -15,4 +15,3 @@ x.print_album(f)
 for i in albums:
 	i.print_album(f)
 print("Total results: " + str(len(albums)) + " albums")'''
-''
