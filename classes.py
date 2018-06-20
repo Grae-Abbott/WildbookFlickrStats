@@ -85,16 +85,17 @@ class Photographer:
 	def __init__(self, user_id, name = "", userIfPro=False, geotagged= False, hometown="", timeTaken = -1, timePosted = -1, numposted=-1, numalbum=-1, firstyear=-1, numlocations=-1):
 		self.user_id = user_id
 		self.name = name 
+		user_info=people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))
 		self.timeTaken = timeTaken if not(timeTaken == -1) else datetime.strptime(photo_info['photo']['dates']['taken'], '%Y-%m-%d %H:%M:%S').strftime("%s") #unix timestamp
 		self.timePosted = timePosted if not(timePosted == -1) else photo_info['photo']['dates']['posted'] #unix timestamp
 		self.timeDelay = timeTaken - timePosted
 		self.hometown=hometown
 		self.geotagged = geotagged
 		self.userIfPro=False 
-		self.numposted=numposted
+		self.numposted=numposted #count=people['person']['photos']['count']['_content']
 		self.numalbum=numalbum
-		self.firstyear=firstyear
-		self.numlocations
+		self.firstyear=firstyear #first=people['person']['photos']['firstdate']['_content']
+		self.numlocations=numlocations
 		#frequency??
 		
 		
