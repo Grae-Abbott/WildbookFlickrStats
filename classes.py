@@ -1,3 +1,4 @@
+
 import flickrapi, time, json
 from datetime import datetime, tzinfo
 
@@ -68,16 +69,16 @@ class Photo:
     def get_pos(self):
         if self.albumId == "":
             return -1
+        else:
+            album = json.loads(flickrObj.photosets.getPhotos(photoset_id = self.albumId, user_id = self.id).decode(encoding='utf-8'))
+            if not 'photoset' in album:
+                return -1
             else:
-                album = json.loads(flickrObj.photosets.getPhotos(photoset_id = self.albumId, user_id = self.id).decode(encoding='utf-8'))
-                if not 'photoset' in album:
-                    return -1
-                else:
-                    album = album['photoset']['photo']
-                id_list = [] #list of all pids in album in order they appear on flickr
-                for i in album:
-                    id_list.append(i['id'])
-                return id_list.index(self.id)+1
+                album = album['photoset']['photo']
+            id_list = [] #list of all pids in album in order they appear on flickr
+            for i in album:
+                id_list.append(i['id'])
+            return id_list.index(self.id)+1
 
     def print_photo(self, file):
         file.write("Photo id: " + str(self.id) + '\n')
@@ -88,7 +89,7 @@ class Photo:
         file.write("Taken in zoo: " + str(self.photoIfZoo) + '\n')
         file.write("Album ID: " + str(self.albumId) + '\n')
         file.write("Positiion in the album: " + str(self.pos) + '\n')
-        file.write("Photo description: " + str(`self.photo_description) + '\n')
+        file.write("Photo description: " + str(self.photo_description) + '\n')
         file.write("Geotagged: " + str(self.geotagged) + '\n')
         file.write("Tags: " + str(self.tags) + '\n')
         file.write("===" + '\n')
@@ -96,13 +97,11 @@ class Photo:
 
 
 class Photographer:
-    def __init__(self, user_id, name = "", userIfPro=False, geotagged= False, hometown="", timeTaken = -1, timePosted = -1, numposted=-1, numalbum=-1, firstyear=-1, numlocations=-1):
+    def __init__(self, user_id, name = "", userIfPro=False, geotagged= 0, hometown="", delay=0, numposted=-1, numalbum=-1, firstyear="", numlocations=-1, mindelay=0, maxdelay=0):
         self.user_id = user_id
         self.name = name
-        user_info=people=json.loads(flickrObj.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))
-        self.timeTaken = timeTaken if not(timeTaken == -1) else datetime.strptime(photo_info['photo']['dates']['taken'], '%Y-%m-%d %H:%M %S').strftime("%s") #unix timestamp
-        self.timePosted = timePosted if not(timePosted == -1) else photo_info['photo']['dates']['posted'] #unix timestamp
-        self.timeDelay = timeTaken - timePosted
+        #user_info=people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))
+        self.timeDelay = delay
         self.hometown=hometown
         self.geotagged = geotagged
         self.userIfPro=False
@@ -110,30 +109,33 @@ class Photographer:
         self.numalbum=numalbum
         self.firstyear=firstyear #first=people['person']['photos']['firstdate']['_content']
         self.numlocations=numlocations
-        #frequency??
+        self.mindelay=mindelay
+        self.maxdelay=maxdelay
 
-        self.checkIfPro(user_id)
+        #self.checkIfPro(user_id)
     
     #i dont know if this is right or necessary?
     def checkIfPro(self, user_id):
-        people=json.loads(flickrObj.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))['person']['ispro']
+        people=json.loads(apiInstance.people.getInfo(user_id=self.user_id).decode(encoding='utf-8'))['person']['ispro']
         if(people==1):
             return True
         else:
             return False
 
     def print_photographer(self, file):
-        file.write("User id: " + str(self.user_id) + '\n')
-        file.write("Name: " + str(self.name) + '\n')
-        file.write("Avg Delay: " + str( round(self.timeDelay/60/60/24 ,5) ) + " days" + '\n')
-        file.write("Hometown: " + str(self.hometown)+'\n')
-        file.write("Avg Geotagged: " + str(self.geotagged) + '\n')
-        file.write("Is Pro: " + str(self.userIfPro) + '\n')
-        file.write("# Pics Posted: " + str(self.numposted) + '\n')
-        file.write("# Albums Posted: " + str(self.numalbum) + '\n')
-        file.write("Day First Active: " + str(datetime.strptime(self.firstyear, '%Y-%m-%d %H:%M:%S').strftime("%s")) + '\n')
-        file.write("Number of Locations: " + str(self.numlocations) + '\n')
-        file.write("===" + '\n')
+        file.write('"'+str(self.user_id) +'"'+ ',')
+        file.write('"'+str(self.name) +"\""+ ',')
+        file.write('"'+str(self.mindelay)+' days' + '"'+',')
+        file.write('"'+str(self.maxdelay)+' days' +'"'+',')
+        file.write('"'+str(self.timeDelay) + " days" + '"'+',')
+        file.write('"'+str(self.hometown)+'"'+',')
+        file.write('"'+str(self.geotagged) + '"'+',')
+        file.write('"'+str(self.userIfPro) + '"'+ ',')
+        file.write('"'+str(self.numposted) + '"'+',')
+        file.write('"'+str(self.numalbum) + '"'+',')
+        file.write('"'+str(self.firstyear) +'"'+ ',')
+        file.write('"'+str(self.numlocations) +'"'+"\n")
+
 
 
 
