@@ -1,6 +1,4 @@
-'''
-THIS IS A COPY OF THE ORIGINAL
-'''
+
 import flickrapi, time, json
 from datetime import datetime, tzinfo
 
@@ -138,7 +136,30 @@ class Photographer:
         file.write('"'+str(self.numlocations) +'"'+"\n")
         
 
+class Gallery:
+    def __init__(self, gal_id, url = "", user_id = "", name = "", size = -1, species_count = {}, species_ratio = -1.0, species_ofInterest = "", photo_list = [], time_range_posted = -1.0, time_range_taken = -1.0):
+        self.gid = gal_id #set id
+        self.url = url
+        self.user_id = user_id
+        self.name = name
+        self.size = size #of album
+        self.species_ratio = species_ratio #ratio of species of interest to total
+        self.soi = species_ofInterest #species of interest
+        self.photo_list = photo_list #image ids
+        self.time_range_posted = time_range_posted
+        self.time_range_taken = time_range_taken
 
+    def print_album(self, file):
+        file.write("'" + str(self.gid) +'"'+ ',')
+        file.write("'"  + str(self.url) +'"'+ ',')
+        file.write("'"  + str(self.user_id) +'"'+ ',')
+        file.write("'" + str(self.name)+'"'+ ',')
+        file.write("'" + str(self.size) +'"'+ ',')
+        file.write("'" + str( round(self.species_ratio,5)  )+'"'+ ',')
+        file.write("'" + str(self.soi) +'"'+ ',')
+        file.write("'" + str(self.photo_list) +'"'+ ',')
+        file.write("'" + str(    round(self.time_range_posted/60/60/24 ,5)   ) +'"'+ ',')
+        file.write("'" + str( round(self.time_range_taken/60/60/24, 5)   ) +'"'+ ',')
 
 
 
