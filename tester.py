@@ -6,7 +6,7 @@ import classes
 
 albums = dts.get_albums()
 print(albums)
-f = open('albums', 'w')
+f = open('albums.csv', 'w')
 x = albums['72157625579178878']
 x.print_album(f)
 #ids = dts.get_ids()

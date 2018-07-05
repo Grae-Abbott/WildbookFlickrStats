@@ -1,4 +1,6 @@
-
+'''
+THIS IS A COPY OF THE ORIGINAL
+'''
 import flickrapi, time, json
 from datetime import datetime, tzinfo
 
@@ -12,25 +14,24 @@ class Album:
         self.url = url
         self.user_id = user_id
         self.name = name
-        self.size = size
-        self.species_ratio = species_ratio
+        self.size = size #of album
+        self.species_ratio = species_ratio #ratio of species of interest to total
         self.soi = species_ofInterest #species of interest
-        self.photo_list = photo_list
+        self.photo_list = photo_list #image ids
         self.time_range_posted = time_range_posted
         self.time_range_taken = time_range_taken
 
     def print_album(self, file):
-        file.write("Album/Set id: " + str(self.sid) + '\n')
-        file.write("Url: " + str(self.url) + '\n')
-        file.write("User id: " + str(self.user_id) + '\n')
-        file.write("Name: " + str(self.name) + '\n')
-        file.write("Number of images: " + str(self.size) + '\n')
-        file.write("Ratio of images of zebras to total: " + str( round(self.species_ratio,5)  ) + '\n')
-        file.write("Species of interest: " + str(self.soi) + '\n')
-        file.write("Image ids: " + str(self.photo_list) + '\n')
-        file.write("Time range of images in album being posted: " + str(    round(self.time_range_posted/60/60/24 ,5)   ) + " days" + '\n')
-        file.write("Time range of images in album being taken: " + str( round(self.time_range_taken/60/60/24, 5)   ) + " days" + '\n')
-        file.write("===" + '\n')
+        file.write("'" + str(self.sid) +'"'+ ',')
+        file.write("'"  + str(self.url) +'"'+ ',')
+        file.write("'"  + str(self.user_id) +'"'+ ',')
+        file.write("'" + str(self.name)+'"'+ ',')
+        file.write("'" + str(self.size) +'"'+ ',')
+        file.write("'" + str( round(self.species_ratio,5)  )+'"'+ ',')
+        file.write("'" + str(self.soi) +'"'+ ',')
+        file.write("'" + str(self.photo_list) +'"'+ ',')
+        file.write("'" + str(    round(self.time_range_posted/60/60/24 ,5)   ) +'"'+ ',')
+        file.write("'" + str( round(self.time_range_taken/60/60/24, 5)   ) +'"'+ ',')
 
 class Photo:
     def __init__(self, pos = -1, url = "", geotagged = False, photographer = "", tags = "", photo_description = "", locationX = -1, locationY = -1, timeTaken = -1, timePosted = -1, photoIfZoo = False, photoId = "", albumId = ""  ):
@@ -81,18 +82,18 @@ class Photo:
             return id_list.index(self.id)+1
 
     def print_photo(self, file):
-        file.write("Photo id: " + str(self.id) + '\n')
-        file.write("Url: " + str(self.url) + '\n')
-        file.write("Location: " + str(self.location) + '\n')
-        file.write("Time difference: " + str( round(self.timeDifference/60/60/24 ,5) ) + " days" + '\n')
-        file.write("Photographer: " + str(self.photographer) + '\n')
-        file.write("Taken in zoo: " + str(self.photoIfZoo) + '\n')
-        file.write("Album ID: " + str(self.albumId) + '\n')
-        file.write("Positiion in the album: " + str(self.pos) + '\n')
-        file.write("Photo description: " + str(self.photo_description) + '\n')
-        file.write("Geotagged: " + str(self.geotagged) + '\n')
-        file.write("Tags: " + str(self.tags) + '\n')
-        file.write("===" + '\n')
+        file.write("'" + str(self.id) +'"'+ ',')
+        file.write('"' + str(self.url)+'"' + ',')
+        file.write('"'+ str(self.location) +'"'+ ',')
+        file.write('"' + str( round(self.timeDifference/60/60/24 ,5) ) + " days"+'"' + ',')
+        file.write('"'+ str(self.photographer) +'"'+ ',')
+        file.write('"'+ str(self.photoIfZoo)+'"' + ',')
+        file.write( '"'+ str(self.albumId) +'"'+ ',')
+        file.write('"'+ str(self.pos) +'"'+ ',')
+        file.write('"'+ str(self.photo_description) +'"'+ ',')
+        file.write('"'+ str(self.geotagged) +'"'+ ',')
+        file.write('"' + str(self.tags) +'"'+ ',')
+
 
 
 
@@ -135,6 +136,8 @@ class Photographer:
         file.write('"'+str(self.numalbum) + '"'+',')
         file.write('"'+str(self.firstyear) +'"'+ ',')
         file.write('"'+str(self.numlocations) +'"'+"\n")
+        
+
 
 
 
